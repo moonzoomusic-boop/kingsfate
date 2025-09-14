@@ -9,8 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/webamp@3.0.0/dist/webamp.min.css">
 
   <style>
-    /* Full-screen background */
-    body, html {
+    html, body {
       margin: 0;
       padding: 0;
       height: 100%;
@@ -19,10 +18,12 @@
       background: black;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
+      justify-content: center;
       align-items: center;
+      font-family: sans-serif;
     }
 
+    /* Background image with fade and Ken Burns effect */
     #background {
       position: fixed;
       top: 0;
@@ -33,46 +34,59 @@
       background-size: cover;
       background-position: center;
       opacity: 0;
-      animation: fadeIn 5s forwards, kenBurns 120s ease-in-out infinite alternate;
-      z-index: -1;
+      animation: fadeInBG 5s forwards, kenBurns 120s ease-in-out infinite alternate;
+      z-index: -2;
     }
 
-    @keyframes fadeIn {
+    @keyframes fadeInBG {
       from { opacity: 0; }
       to { opacity: 1; }
     }
 
     @keyframes kenBurns {
-      0% { transform: scale(1) translate(0px, 0px); }
+      0% { transform: scale(1) translate(0,0); }
       25% { transform: scale(1.03) translate(-10px, 5px); }
       50% { transform: scale(1.06) translate(10px, -10px); }
       75% { transform: scale(1.03) translate(-5px, 10px); }
-      100% { transform: scale(1) translate(0px, 0px); }
+      100% { transform: scale(1) translate(0,0); }
     }
 
-    /* Title image with subtle float */
+    /* Title image fade-in */
     #title {
-      position: relative;
-      margin-bottom: 20px;
       max-width: 90%;
       height: auto;
-      animation: floatTitle 8s ease-in-out infinite alternate;
+      opacity: 0;
+      margin-bottom: 20px;
+      animation: fadeInTitle 2s forwards;
+      animation-delay: 5s; /* starts after background fades in */
     }
 
-    @keyframes floatTitle {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
+    @keyframes fadeInTitle {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
-    /* Webamp player container */
+    /* Webamp player container fade-in */
     #webamp-container {
-      margin-bottom: 40px;
       width: 400px;
       max-width: 90%;
       min-width: 300px;
-      opacity: 0; /* hidden initially */
+      opacity: 0;
       transition: opacity 1s ease-in-out;
+      margin-bottom: 40px;
+      z-index: 1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      #webamp-container {
+        width: 90%;
+        min-width: 200px;
+      }
+
+      #title {
+        max-width: 90%;
+      }
     }
   </style>
 </head>
@@ -81,10 +95,48 @@
   <div id="background"></div>
 
   <!-- Title image -->
-  <img src="AKingsFate_Headlineshadow.png" alt="A King's Fate" id="title">
+  <img src="AKingsFate_Headlineshadow.png" id="title" alt="A King's Fate">
 
-  <!-- Webamp player container -->
+  <!-- Webamp player -->
   <div id="webamp-container"></div>
 
   <!-- Webamp JS -->
-  <s
+  <script src="https://cdn.jsdelivr.net/npm/webamp@3.0.0/dist/webamp.min.js"></script>
+  <script>
+    // Initialize Webamp without autoplay
+    const webamp = new Webamp({
+      initialTracks: [
+        {
+          metaData: {
+            title: "A King's Fate",
+            artist: "Moonzoomusic",
+            coverUrl: "kingsfatecover.jpg"
+          },
+          url: "https://drive.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e"
+        }
+      ],
+      initialSkin: null,
+      uiOptions: {
+        showPlaylist: false,
+        showEq: false,
+        showMainWindow: true,
+        showVisualizer: false,
+        showTrackInfo: false,
+        showVolume: false,
+        showCloseButton: false,
+        showMinimizeButton: false
+      }
+    });
+
+    // Render Webamp in container
+    const container = document.getElementById("webamp-container");
+    webamp.renderWhenReady(container);
+
+    // Fade in player after background + title animations
+    setTimeout(() => {
+      container.style.opacity = 1;
+    }, 7000); // 5s BG + 2s title = 7s total
+  </script>
+
+</body>
+</html>
