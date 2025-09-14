@@ -8,18 +8,18 @@
     /* Reset */
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body, html {
+    html, body {
       height: 100%;
       width: 100%;
       font-family: Arial, sans-serif;
+      overflow-x: hidden;
       background-color: black;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
     }
 
-    /* Background image */
+    /* Background image container with Ken Burns effect */
     .background {
       position: fixed;
       top: 0;
@@ -28,7 +28,7 @@
       height: 100%;
       background: url('kingsfatecover.jpg') center center / cover no-repeat;
       opacity: 0;
-      animation: fadeInBG 5s forwards;
+      animation: fadeInBG 5s forwards, kenBurns 30s ease-in-out infinite alternate;
       z-index: -2;
     }
 
@@ -36,7 +36,13 @@
       to { opacity: 1; }
     }
 
-    /* Container for content so z-index layering works */
+    @keyframes kenBurns {
+      0%   { transform: scale(1) translate(0, 0); }
+      50%  { transform: scale(1.05) translate(-1%, -1%); }
+      100% { transform: scale(1.1) translate(-2%, -2%); }
+    }
+
+    /* Content container */
     .content {
       position: relative;
       z-index: 1;
@@ -50,18 +56,18 @@
     /* Title graphic */
     .title {
       width: 100%;
-      max-width: 600px;
+      max-width: 500px;
       margin-bottom: 20px;
       opacity: 0;
       animation: fadeInTitle 2s forwards;
-      animation-delay: 5s; /* starts after bg fade */
+      animation-delay: 5s; /* after bg fade */
     }
 
     @keyframes fadeInTitle {
       to { opacity: 1; }
     }
 
-    /* Player */
+    /* SoundCloud player container */
     .player-container {
       width: 100%;
       opacity: 0;
@@ -88,8 +94,10 @@
 </head>
 <body>
 
+  <!-- Background with Ken Burns effect -->
   <div class="background"></div>
 
+  <!-- Foreground content -->
   <div class="content">
     <img src="AKingsFate_Headlineshadow.png" alt="A King's Fate" class="title">
 
