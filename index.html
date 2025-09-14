@@ -14,6 +14,7 @@
     height: 100%;
   }
 
+  /* Background with Ken Burns */
   #background {
     position: absolute;
     width: 100%;
@@ -33,6 +34,7 @@
     100% { transform: scale(1.1) translate(-5px, -5px); }
   }
 
+  /* Title */
   #title {
     position: absolute;
     top: 50%;
@@ -48,6 +50,7 @@
     to { opacity: 1; }
   }
 
+  /* Player container */
   #playerContainer {
     position: absolute;
     bottom: 50px;
@@ -64,7 +67,7 @@
     to { opacity: 1; }
   }
 
-  /* Make the player scale on small screens */
+  /* Scale the player to fit mobile */
   .webamp-container {
     width: 100% !important;
   }
@@ -75,16 +78,14 @@
 <div id="background"></div>
 <img id="title" src="AKingsFate_Headlineshadow.png" alt="A King's Fate">
 
-<div id="playerContainer">
-  <div id="webamp"></div>
-</div>
+<div id="playerContainer"></div>
 
 <!-- Webamp JS & CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/webamp@3.0.3/dist/webamp.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/webamp@3.0.3/dist/webamp.min.js"></script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     const webamp = new Webamp({
       initialTracks: [
         {
@@ -95,17 +96,15 @@
           url: "https://docs.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e"
         }
       ],
-      initialSkin: null, // default classic skin
-      noWebampWindow: true, // embed in container
+      noWebampWindow: false,  // show player UI
       initialTracksStartPlaying: false
     });
 
-    webamp.renderWhenReady(document.getElementById('webamp')).then(() => {
+    webamp.renderWhenReady(document.getElementById("playerContainer")).then(() => {
       // Remove unwanted controls
-      const playerUI = document.getElementById('webamp');
-      const controls = playerUI.querySelectorAll('.control');
+      const controls = document.querySelectorAll(".control");
       controls.forEach(control => {
-        const keep = ["play", "pause", "fastForward", "rewind"];
+        const keep = ["play", "pause", "rewind", "fastForward"];
         if (!keep.includes(control.dataset.command)) {
           control.style.display = "none";
         }
