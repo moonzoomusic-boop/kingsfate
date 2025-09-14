@@ -1,104 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Novel Launch</title>
-<style>
-  body {
-    margin: 0;
-    background: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
-    position: relative;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A King's Fate</title>
 
-  /* Background cover */
-  #cover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    animation: fadeIn 2s forwards, kenBurns 20s infinite alternate;
-    z-index: 1;
-  }
+  <!-- Webamp CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/webamp@3.0.0/dist/webamp.min.css">
 
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
-
-  @keyframes kenBurns {
-    from { transform: scale(1) translate(0, 0); }
-    to { transform: scale(1.05) translate(-10px, -10px); }
-  }
-
-  /* Overlay container for title + player */
-  #overlay {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-  }
-
-  /* Title graphic */
-  #title {
-    width: 100%;
-    max-width: 300px; /* scales for desktop/mobile */
-    height: auto;
-  }
-
-  /* Webamp container */
-  #webamp-container {
-    width: 100%;
-    max-width: 300px; /* same width as title */
-  }
-
-  /* Make sure everything scales nicely on smaller phones */
-  @media (max-width: 400px) {
-    #title, #webamp-container {
-      max-width: 90%;
+  <style>
+    /* Full-screen background */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
     }
-  }
-</style>
+
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("kingsfatecover.jpg");
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      animation: fadeIn 5s forwards, kenBurns 120s ease-in-out infinite alternate;
+      z-index: -1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes kenBurns {
+      0% { transform: scale(1) translate(0px, 0px); }
+      25% { transform: scale(1.03) translate(-10px, 5px); }
+      50% { transform: scale(1.06) translate(10px, -10px); }
+      75% { transform: scale(1.03) translate(-5px, 10px); }
+      100% { transform: scale(1) translate(0px, 0px); }
+    }
+
+    /* Title image with subtle float */
+    #title {
+      position: relative;
+      margin-bottom: 20px;
+      max-width: 90%;
+      height: auto;
+      animation: floatTitle 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatTitle {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* Webamp player container */
+    #webamp-container {
+      margin-bottom: 40px;
+      width: 400px;
+      max-width: 90%;
+      min-width: 300px;
+    }
+
+    /* Full-screen overlay for mobile play */
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 2em;
+      text-align: center;
+      z-index: 10;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Background artwork -->
-<img id="cover" src="kingsfatecover.jpg" alt="Novel Cover">
+  <div id="background"></div>
 
-<!-- Overlay content -->
-<div id="overlay">
-  <!-- Book title graphic -->
-  <img id="title" src="AKingsFate_Headlineshadow.png" alt="Book Title">
+  <!-- Title image -->
+  <img src="AKingsFate_Headlineshadow.png" alt="A King's Fate" id="title">
 
-  <!-- Webamp player -->
+  <!-- Webamp player container -->
   <div id="webamp-container"></div>
-</div>
 
-<!-- Webamp script -->
-<script src="https://cdn.jsdelivr.net/npm/webamp"></script>
-<script>
-  const webamp = new Webamp({
-    initialTracks: [
-      {
-        metaData: { artist: "Author Name", title: "Track 1" },
-        url: "https://drive.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e"
+  <!-- Mobile overlay -->
+  <div id="overlay">Tap to start the player 🎵</div>
+
+  <!-- Webamp JS -->
+  <script src="https://cdn.jsdelivr.net/npm/webamp@3.0.0/dist/webamp.min.js"></script>
+  <script>
+    // Initialize Webamp
+    const webamp = new Webamp({
+      initialTracks: [
+        {
+          metaData: {
+            title: "A King's Fate",
+            artist: "Moonzoomusic",
+            coverUrl: "kingsfatecover.jpg"
+          },
+          url: "https://drive.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e"
+        }
+      ],
+      initialSkin: null,
+    });
+
+    webamp.renderWhenReady(document.getElementById("webamp-container"));
+
+    // Mobile-friendly: start on user tap
+    const overlay = document.getElementById("overlay");
+    overlay.addEventListener("click", () => {
+      webamp.play();
+      overlay.style.display = "none"; // hide overlay
+    });
+
+    // Optional: ensure audio keeps playing in background
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
+        // Audio continues if already playing
       }
-    ],
-    ui: { theme: "classic" }
-  });
-  webamp.renderWhenReady(document.getElementById("webamp-container"));
-</script>
+    });
+  </script>
 
 </body>
 </html>
