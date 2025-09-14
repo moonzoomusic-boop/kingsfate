@@ -1,1 +1,104 @@
-<h1>Novel Launch Coming Soon</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novel Launch</title>
+<style>
+  body {
+    margin: 0;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Background cover */
+  #cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    animation: fadeIn 2s forwards, kenBurns 20s infinite alternate;
+    z-index: 1;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  @keyframes kenBurns {
+    from { transform: scale(1) translate(0, 0); }
+    to { transform: scale(1.05) translate(-10px, -10px); }
+  }
+
+  /* Overlay container for title + player */
+  #overlay {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  /* Title graphic */
+  #title {
+    width: 100%;
+    max-width: 300px; /* scales for desktop/mobile */
+    height: auto;
+  }
+
+  /* Webamp container */
+  #webamp-container {
+    width: 100%;
+    max-width: 300px; /* same width as title */
+  }
+
+  /* Make sure everything scales nicely on smaller phones */
+  @media (max-width: 400px) {
+    #title, #webamp-container {
+      max-width: 90%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background artwork -->
+<img id="cover" src="kingsfatecover.jpg" alt="Novel Cover">
+
+<!-- Overlay content -->
+<div id="overlay">
+  <!-- Book title graphic -->
+  <img id="title" src="AKingsFate_Headlineshadow.png" alt="Book Title">
+
+  <!-- Webamp player -->
+  <div id="webamp-container"></div>
+</div>
+
+<!-- Webamp script -->
+<script src="https://cdn.jsdelivr.net/npm/webamp"></script>
+<script>
+  const webamp = new Webamp({
+    initialTracks: [
+      {
+        metaData: { artist: "Author Name", title: "Track 1" },
+        url: "https://drive.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e"
+      }
+    ],
+    ui: { theme: "classic" }
+  });
+  webamp.renderWhenReady(document.getElementById("webamp-container"));
+</script>
+
+</body>
+</html>
