@@ -1,136 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A King's Fate</title>
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background: black;
-    font-family: sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A King's Fate</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
 
-  /* Background Image */
-  #background {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: url('kingsfatecover.jpg') no-repeat center center;
-    background-size: cover;
-    opacity: 0;
-    animation: fadeInBackground 5s forwards;
-  }
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('kingsfatecover.jpg') no-repeat center center;
+      background-size: cover;
+      opacity: 0;
+      animation: fadeInBG 5s forwards;
+      z-index: 0;
+    }
 
-  @keyframes fadeInBackground {
-    to { opacity: 1; }
-  }
+    @keyframes fadeInBG {
+      to { opacity: 1; }
+    }
 
-  /* Title Graphic */
-  #title {
-    max-width: 80%;
-    opacity: 0;
-    animation: fadeInTitle 2s forwards;
-    animation-delay: 5s; /* Start after background fade */
-    margin-bottom: 20px;
-    z-index: 2;
-  }
+    #title {
+      max-width: 90%;
+      width: 600px;
+      opacity: 0;
+      margin-top: 20px;
+      z-index: 1;
+      animation: fadeInTitle 2s forwards;
+      animation-delay: 5s;
+    }
 
-  @keyframes fadeInTitle {
-    to { opacity: 1; }
-  }
+    @keyframes fadeInTitle {
+      to { opacity: 1; }
+    }
 
-  /* Audio Controls Container */
-  #controlsContainer {
-    display: flex;
-    gap: 20px;
-    opacity: 0;
-    animation: fadeInControls 1s forwards;
-    animation-delay: 7s; /* Start after title fade */
-    z-index: 2;
-  }
+    #playerContainer {
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeInPlayer 1s forwards;
+      animation-delay: 7s;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  @keyframes fadeInControls {
-    to { opacity: 1; }
-  }
+    @keyframes fadeInPlayer {
+      to { opacity: 1; }
+    }
 
-  button {
-    font-size: 24px;
-    padding: 10px 15px;
-    border: none;
-    background: rgba(255,255,255,0.2);
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
+    #controls {
+      display: flex;
+      gap: 20px;
+    }
 
-  button:hover {
-    background: rgba(255,255,255,0.4);
-  }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: rgba(255,255,255,0.8);
+    }
 
-  audio {
-    display: none; /* Hide default audio */
-  }
+    button:active {
+      background-color: rgba(200,200,200,0.8);
+    }
 
-</style>
+    @media (max-width: 768px) {
+      button {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+
+      #title {
+        width: 90%;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div id="background"></div>
+  <img id="title" src="AKingsFate_Headlineshadow.png" alt="A King's Fate">
 
-<div id="background"></div>
+  <div id="playerContainer">
+    <audio id="player" preload="none">
+      <source src="https://drive.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    <div id="controls">
+      <button id="playPause">Play</button>
+      <button id="rewind">⏪ 10s</button>
+      <button id="fastForward">10s ⏩</button>
+    </div>
+  </div>
 
-<img id="title" src="AKingsFate_Headlineshadow.png" alt="A King's Fate">
+  <script>
+    const player = document.getElementById('player');
+    const playPauseBtn = document.getElementById('playPause');
+    const rewindBtn = document.getElementById('rewind');
+    const fastForwardBtn = document.getElementById('fastForward');
 
-<!-- HTML5 Audio -->
-<audio id="player" preload="none">
-  <source src="https://drive.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e" type="audio/mpeg">
-</audio>
+    playPauseBtn.addEventListener('click', () => {
+      if(player.paused) {
+        player.play();
+        playPauseBtn.textContent = 'Pause';
+      } else {
+        player.pause();
+        playPauseBtn.textContent = 'Play';
+      }
+    });
 
-<!-- Custom Controls -->
-<div id="controlsContainer">
-  <button id="rewind">⏪</button>
-  <button id="playPause">▶️</button>
-  <button id="forward">⏩</button>
-</div>
+    rewindBtn.addEventListener('click', () => {
+      player.currentTime = Math.max(0, player.currentTime - 10);
+    });
 
-<script>
-  const player = document.getElementById('player');
-  const playPauseBtn = document.getElementById('playPause');
-  const rewindBtn = document.getElementById('rewind');
-  const forwardBtn = document.getElementById('forward');
-
-  // Play/Pause
-  playPauseBtn.addEventListener('click', () => {
-    if (player.paused) {
-      player.play();
-      playPauseBtn.textContent = "⏸️";
-    } else {
-      player.pause();
-      playPauseBtn.textContent = "▶️";
-    }
-  });
-
-  // Rewind 10s
-  rewindBtn.addEventListener('click', () => {
-    player.currentTime = Math.max(player.currentTime - 10, 0);
-  });
-
-  // Fast Forward 10s
-  forwardBtn.addEventListener('click', () => {
-    player.currentTime = Math.min(player.currentTime + 10, player.duration || player.currentTime);
-  });
-
-  // Optional: Pause/play button sync if user interacts with the default system controls
-  player.addEventListener('play', () => playPauseBtn.textContent = "⏸️");
-  player.addEventListener('pause', () => playPauseBtn.textContent = "▶️");
-</script>
-
+    fastForwardBtn.addEventListener('click', () => {
+      player.currentTime = Math.min(player.duration, player.currentTime + 10);
+    });
+  </script>
 </body>
 </html>
