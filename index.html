@@ -11,43 +11,59 @@
       box-sizing: border-box;
     }
 
-    body, html {
+    html, body {
       width: 100%;
       height: 100%;
-      overflow-x: hidden;
       font-family: Arial, sans-serif;
-      background-color: black;
+      overflow-x: hidden;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      background-color: black;
+      position: relative;
     }
 
-    .fade-in {
-      opacity: 0;
-      animation-fill-mode: forwards;
-    }
-
+    /* Background Image Fullscreen */
     #background {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      max-width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0;
       animation: fadeInBg 5s forwards;
     }
 
+    /* Container for Title + Player */
+    #content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    /* Title Image */
     #title {
       width: 80%;
-      max-width: 600px;
-      margin-top: 20px;
+      max-width: 500px;
+      margin-bottom: 20px;
+      opacity: 0;
       animation: fadeInTitle 2s forwards;
       animation-delay: 5s;
     }
 
+    /* SoundCloud Player */
     #player {
-      width: 90%;
-      max-width: 600px;
+      width: 100%;
+      max-width: 500px;
       height: 166px;
-      margin-top: 20px;
+      opacity: 0;
       animation: fadeInPlayer 1s forwards;
       animation-delay: 7s;
     }
@@ -66,21 +82,28 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Make it responsive */
+    @media (max-width: 400px) {
+      #title {
+        width: 90%;
+      }
+      #player {
+        height: 140px;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Background Image -->
-  <img id="background" src="kingsfatecover.jpg" alt="Kings Fate Cover" class="fade-in">
+  <!-- Background -->
+  <img id="background" src="kingsfatecover.jpg" alt="Kings Fate Cover">
 
-  <!-- Title Image -->
-  <img id="title" src="AKingsFate_Headlineshadow.png" alt="A King's Fate Title" class="fade-in">
-
-  <!-- SoundCloud Player -->
-  <iframe id="player" 
-    scrolling="no" 
-    frameborder="no" 
-    allow="autoplay" 
-    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2160026091&color=%23ff5500&auto_play=false&hide_related=true&show_comments=true&show_user=true&show_reposts=false&show_teaser=false">
-  </iframe>
-</body>
-</html>
+  <!-- Foreground Content -->
+  <div id="content">
+    <img id="title" src="AKingsFate_Headlineshadow.png" alt="A King's Fate Title">
+    
+    <iframe id="player" 
+      scrolling="no" 
+      frameborder="no" 
+      allow="autoplay" 
+      src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2160026091&color=%23ff5500&auto_play=false&hide_related=true&show_comments=true&show_user=true&show_reposts=fals_
