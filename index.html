@@ -10,13 +10,13 @@
       padding: 0;
       height: 100%;
       width: 100%;
+      overflow-x: hidden;
+      font-family: Arial, sans-serif;
       background-color: black;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      overflow: hidden;
-      font-family: sans-serif;
     }
 
     #background {
@@ -25,115 +25,59 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: url('kingsfatecover.jpg') no-repeat center center;
-      background-size: cover;
+      background: url('kingsfatecover.jpg') center center / cover no-repeat;
       opacity: 0;
-      animation: fadeInBG 5s forwards;
-      z-index: 0;
+      animation: fadeInBackground 5s forwards;
+      z-index: -2;
     }
 
-    @keyframes fadeInBG {
+    @keyframes fadeInBackground {
       to { opacity: 1; }
     }
 
     #title {
-      max-width: 90%;
-      width: 600px;
       opacity: 0;
-      margin-top: 20px;
-      z-index: 1;
+      max-width: 90%;
+      margin-bottom: 20px;
       animation: fadeInTitle 2s forwards;
-      animation-delay: 5s;
+      animation-delay: 5s; /* starts after background fade */
+      z-index: 1;
     }
 
     @keyframes fadeInTitle {
       to { opacity: 1; }
     }
 
-    #playerContainer {
-      margin-top: 20px;
+    #player-container {
       opacity: 0;
+      width: 90%;
+      max-width: 600px;
       animation: fadeInPlayer 1s forwards;
-      animation-delay: 7s;
-      z-index: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      animation-delay: 7s; /* after background + title fade */
     }
 
     @keyframes fadeInPlayer {
       to { opacity: 1; }
     }
 
-    #controls {
-      display: flex;
-      gap: 20px;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
+    /* Responsive iframe */
+    .soundcloud-iframe {
+      width: 100%;
+      height: 166px;
       border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: rgba(255,255,255,0.8);
     }
 
-    button:active {
-      background-color: rgba(200,200,200,0.8);
-    }
-
-    @media (max-width: 768px) {
-      button {
-        font-size: 14px;
-        padding: 8px 16px;
-      }
-
+    /* Small screen adjustments */
+    @media (max-width: 600px) {
       #title {
-        width: 90%;
+        max-width: 95%;
+      }
+      #player-container {
+        height: 150px;
       }
     }
   </style>
 </head>
 <body>
-  <div id="background"></div>
-  <img id="title" src="AKingsFate_Headlineshadow.png" alt="A King's Fate">
-
-  <div id="playerContainer">
-    <audio id="player" preload="none">
-      <source src="https://drive.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
-    <div id="controls">
-      <button id="playPause">Play</button>
-      <button id="rewind">⏪ 10s</button>
-      <button id="fastForward">10s ⏩</button>
-    </div>
-  </div>
-
-  <script>
-    const player = document.getElementById('player');
-    const playPauseBtn = document.getElementById('playPause');
-    const rewindBtn = document.getElementById('rewind');
-    const fastForwardBtn = document.getElementById('fastForward');
-
-    playPauseBtn.addEventListener('click', () => {
-      if(player.paused) {
-        player.play();
-        playPauseBtn.textContent = 'Pause';
-      } else {
-        player.pause();
-        playPauseBtn.textContent = 'Play';
-      }
-    });
-
-    rewindBtn.addEventListener('click', () => {
-      player.currentTime = Math.max(0, player.currentTime - 10);
-    });
-
-    fastForwardBtn.addEventListener('click', () => {
-      player.currentTime = Math.min(player.duration, player.currentTime + 10);
-    });
-  </script>
-</body>
-</html>
+  <!-- Background -->
+  <div id="bac
