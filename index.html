@@ -15,15 +15,15 @@
       height: 100%;
       width: 100%;
       overflow: hidden;
-      background: black;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      background: black;
       font-family: sans-serif;
     }
 
-    /* Background image with fade and Ken Burns effect */
+    /* Background image with fade + Ken Burns */
     #background {
       position: fixed;
       top: 0;
@@ -51,30 +51,23 @@
       100% { transform: scale(1) translate(0,0); }
     }
 
-    /* Title image fade-in */
+    /* Title fade-in */
     #title {
       max-width: 90%;
       height: auto;
       opacity: 0;
       margin-bottom: 20px;
-      animation: fadeInTitle 2s forwards;
-      animation-delay: 5s; /* starts after background fades in */
     }
 
-    @keyframes fadeInTitle {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    /* Webamp player container fade-in */
+    /* Webamp container hidden initially */
     #webamp-container {
       width: 400px;
       max-width: 90%;
       min-width: 300px;
       opacity: 0;
-      transition: opacity 1s ease-in-out;
       margin-bottom: 40px;
       z-index: 1;
+      transition: opacity 1s ease-in-out;
     }
 
     /* Responsive adjustments */
@@ -103,7 +96,10 @@
   <!-- Webamp JS -->
   <script src="https://cdn.jsdelivr.net/npm/webamp@3.0.0/dist/webamp.min.js"></script>
   <script>
-    // Initialize Webamp without autoplay
+    const title = document.getElementById("title");
+    const webampContainer = document.getElementById("webamp-container");
+
+    // Initialize Webamp
     const webamp = new Webamp({
       initialTracks: [
         {
@@ -122,20 +118,24 @@
         showMainWindow: true,
         showVisualizer: false,
         showTrackInfo: false,
-        showVolume: false,
-        showCloseButton: false,
-        showMinimizeButton: false
+        showVolume: false
       }
     });
 
     // Render Webamp in container
-    const container = document.getElementById("webamp-container");
-    webamp.renderWhenReady(container);
+    webamp.renderWhenReady(webampContainer);
 
-    // Fade in player after background + title animations
+    // Sequence fade-ins
     setTimeout(() => {
-      container.style.opacity = 1;
-    }, 7000); // 5s BG + 2s title = 7s total
+      // Fade in title over 2 seconds
+      title.style.transition = "opacity 2s ease-in-out";
+      title.style.opacity = 1;
+
+      // After title fade completes, fade in player
+      setTimeout(() => {
+        webampContainer.style.opacity = 1;
+      }, 2000); // 2s for title fade
+    }, 5000); // 5s for background fade
   </script>
 
 </body>
