@@ -15,15 +15,15 @@
       width: 100%;
       height: 100%;
       font-family: Arial, sans-serif;
-      overflow-x: hidden;
+      background-color: black;
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: black;
+      overflow-x: hidden;
       position: relative;
     }
 
-    /* Background Image Fullscreen */
+    /* Fullscreen background image */
     #background {
       position: absolute;
       top: 0;
@@ -36,7 +36,7 @@
       animation: fadeInBg 5s forwards;
     }
 
-    /* Container for Title + Player */
+    /* Container for title and player */
     #content {
       position: relative;
       z-index: 1;
@@ -48,26 +48,27 @@
       max-width: 600px;
     }
 
-    /* Title Image */
+    /* Title graphic */
     #title {
       width: 80%;
       max-width: 500px;
       margin-bottom: 20px;
       opacity: 0;
       animation: fadeInTitle 2s forwards;
-      animation-delay: 5s;
+      animation-delay: 5s; /* start after background fade-in */
     }
 
-    /* SoundCloud Player */
+    /* SoundCloud player */
     #player {
       width: 100%;
       max-width: 500px;
       height: 166px;
       opacity: 0;
       animation: fadeInPlayer 1s forwards;
-      animation-delay: 7s;
+      animation-delay: 7s; /* start after title fade-in */
     }
 
+    /* Fade-in animations */
     @keyframes fadeInBg {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -83,7 +84,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Make it responsive */
+    /* Responsive adjustments */
     @media (max-width: 400px) {
       #title {
         width: 90%;
@@ -95,15 +96,21 @@
   </style>
 </head>
 <body>
-  <!-- Background -->
+  <!-- Background image -->
   <img id="background" src="kingsfatecover.jpg" alt="Kings Fate Cover">
 
-  <!-- Foreground Content -->
+  <!-- Foreground content: title + player -->
   <div id="content">
+    <!-- Title graphic -->
     <img id="title" src="AKingsFate_Headlineshadow.png" alt="A King's Fate Title">
-    
+
+    <!-- SoundCloud player directly under title -->
     <iframe id="player" 
       scrolling="no" 
       frameborder="no" 
       allow="autoplay" 
-      src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2160026091&color=%23ff5500&auto_play=false&hide_related=true&show_comments=true&show_user=true&show_reposts=fals_
+      src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2160026091&color=%23ff5500&auto_play=false&hide_related=true&show_comments=true&show_user=true&show_reposts=false&show_teaser=false">
+    </iframe>
+  </div>
+</body>
+</html>
