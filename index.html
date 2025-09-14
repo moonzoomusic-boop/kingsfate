@@ -16,31 +16,9 @@
       height: 100%;
       width: 100%;
       font-family: Arial, sans-serif;
-      overflow-x: hidden;
-      background: black;
-    }
-
-    /* Background image with fade-in and Ken Burns effect */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image: url('kingsfatecover.jpg');
+      background: url('kingsfatecover.jpg') no-repeat center center fixed;
       background-size: cover;
-      background-position: center;
-      opacity: 0;
-      animation: fadeInBG 5s forwards, kenBurns 30s ease-in-out infinite alternate;
-      z-index: -2;
-    }
-
-    @keyframes fadeInBG {
-      to { opacity: 1; }
-    }
-
-    @keyframes kenBurns {
-      0% { transform: scale(1) translate(0,0); }
-      100% { transform: scale(1.05) translate(0,-2%); }
+      color: white;
     }
 
     /* Container for title + player */
@@ -51,39 +29,34 @@
       margin: 0 auto;
       top: 15%;
       text-align: center;
-      color: white;
     }
 
     /* Title graphic */
     .title-img {
       width: 80%;
       max-width: 400px;
-      opacity: 0;
-      animation: fadeInTitle 2s forwards;
-      animation-delay: 5s; /* wait for bg fade-in */
       margin: 0 auto 20px auto;
     }
 
-    @keyframes fadeInTitle {
-      to { opacity: 1; }
-    }
-
     /* SoundCloud iframe */
-    .player-container {
-      opacity: 0;
-      animation: fadeInPlayer 2s forwards;
-      animation-delay: 7s; /* after title fades in */
-    }
-
-    @keyframes fadeInPlayer {
-      to { opacity: 1; }
-    }
-
-    /* Responsive iframe */
     .player-container iframe {
       width: 100%;
       max-width: 600px;
       height: 166px;
       border: none;
     }
-  </s
+
+    /* Responsive text under iframe */
+    .player-info {
+      font-size: 10px;
+      color: #cccccc;
+      line-break: anywhere;
+      word-break: normal;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-family: Interstate, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Garuda, Verdana, Tahoma, sans-serif;
+      font-weight: 100;
+      margin-top: 5px;
+    }
+  </sty
