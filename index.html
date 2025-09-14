@@ -4,26 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>A King's Fate</title>
-
-  <!-- Webamp CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/webamp@3.0.0/dist/webamp.min.css">
-
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
+      overflow-x: hidden;
       width: 100%;
-      overflow: hidden;
+      height: 100%;
+      font-family: sans-serif;
+      background-color: black;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      background: black;
-      font-family: sans-serif;
+      justify-content: center;
     }
 
-    /* Background image with fade + Ken Burns */
+    /* Background fade + Ken Burns */
+    @keyframes fadeInBG {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes kenBurns {
+      0% { transform: scale(1) translate(0,0); }
+      25% { transform: scale(1.02) translate(-5px, 2px); }
+      50% { transform: scale(1.04) translate(3px, -4px); }
+      75% { transform: scale(1.02) translate(-2px, 3px); }
+      100% { transform: scale(1) translate(0,0); }
+    }
+
     #background {
       position: fixed;
       top: 0;
@@ -34,109 +43,109 @@
       background-size: cover;
       background-position: center;
       opacity: 0;
-      animation: fadeInBG 5s forwards, kenBurns 120s ease-in-out infinite alternate;
+      animation: fadeInBG 5s forwards, kenBurns 180s ease-in-out infinite alternate;
       z-index: -2;
     }
 
-    @keyframes fadeInBG {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes kenBurns {
-      0% { transform: scale(1) translate(0,0); }
-      25% { transform: scale(1.03) translate(-10px, 5px); }
-      50% { transform: scale(1.06) translate(10px, -10px); }
-      75% { transform: scale(1.03) translate(-5px, 10px); }
-      100% { transform: scale(1) translate(0,0); }
-    }
-
-    /* Title fade-in */
+    /* Title fade + parallax */
     #title {
-      max-width: 90%;
-      height: auto;
+      width: 60%;
+      max-width: 600px;
       opacity: 0;
-      margin-bottom: 20px;
+      transform: translateY(0);
+      transition: opacity 2s ease-in-out, transform 180s ease-in-out;
+      z-index: 1;
+      margin-bottom: 40px;
     }
 
-    /* Webamp container hidden initially */
+    /* Webamp player container */
     #webamp-container {
       width: 400px;
       max-width: 90%;
       min-width: 300px;
       opacity: 0;
+      transform: translateY(20px);
       margin-bottom: 40px;
       z-index: 1;
-      transition: opacity 1s ease-in-out;
+      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
     }
 
-    /* Responsive adjustments */
     @media (max-width: 600px) {
-      #webamp-container {
-        width: 90%;
-        min-width: 200px;
-      }
-
-      #title {
-        max-width: 90%;
-      }
+      #title { width: 90%; }
+      #webamp-container { width: 90%; min-width: 200px; }
     }
   </style>
 </head>
 <body>
-
   <div id="background"></div>
-
-  <!-- Title image -->
   <img src="AKingsFate_Headlineshadow.png" id="title" alt="A King's Fate">
-
-  <!-- Webamp player -->
   <div id="webamp-container"></div>
 
-  <!-- Webamp JS -->
-  <script src="https://cdn.jsdelivr.net/npm/webamp@3.0.0/dist/webamp.min.js"></script>
+  <!-- Webamp -->
+  <script src="https://cdn.jsdelivr.net/npm/webamp@3.0.1/dist/webamp.min.js"></script>
   <script>
     const title = document.getElementById("title");
     const webampContainer = document.getElementById("webamp-container");
 
-    // Initialize Webamp
-    const webamp = new Webamp({
-      initialTracks: [
-        {
-          metaData: {
-            title: "A King's Fate",
-            artist: "Moonzoomusic",
-            coverUrl: "kingsfatecover.jpg"
-          },
-          url: "https://drive.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e"
-        }
-      ],
-      initialSkin: null,
-      uiOptions: {
-        showPlaylist: false,
-        showEq: false,
-        showMainWindow: true,
-        showVisualizer: false,
-        showTrackInfo: false,
-        showVolume: false
-      }
-    });
-
-    // Render Webamp in container
-    webamp.renderWhenReady(webampContainer);
-
-    // Sequence fade-ins
+    // Start sequence after background fade (5s)
     setTimeout(() => {
-      // Fade in title over 2 seconds
-      title.style.transition = "opacity 2s ease-in-out";
+      // Fade in title
       title.style.opacity = 1;
 
-      // After title fade completes, fade in player
-      setTimeout(() => {
-        webampContainer.style.opacity = 1;
-      }, 2000); // 2s for title fade
-    }, 5000); // 5s for background fade
-  </script>
+      // Add slight parallax along with Ken Burns
+      title.style.transform = "translateY(-10px)";
 
+      // Show Webamp controls after title fade (2s)
+      setTimeout(() => {
+        try {
+          const webamp = new Webamp({
+            initialTracks: [
+              {
+                metaData: {
+                  title: "A King's Fate",
+                  artist: "Moonzoomusic",
+                  coverUrl: "kingsfatecover.jpg"
+                },
+                url: "https://drive.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e"
+              }
+            ],
+            initialSkin: null,
+            uiOptions: {
+              showMainWindow: true,
+              showPlaylist: false,
+              showEq: false,
+              showTrackInfo: false,
+              showVolume: false,
+              showVisualizer: false,
+              showTime: false,
+              showTitleBar: false
+            }
+          });
+
+          webamp.renderWhenReady(webampContainer);
+
+          // Animate Webamp container fade/slide
+          setTimeout(() => {
+            webampContainer.style.opacity = 1;
+            webampContainer.style.transform = "translateY(0)";
+          }, 200);
+
+          // Limit buttons to Play/Pause, FF, RW
+          webamp.onUIReady(() => {
+            const buttons = webampContainer.querySelectorAll(".webamp-button");
+            buttons.forEach(button => {
+              const ariaLabel = button.getAttribute("aria-label");
+              if (!["Play/Pause", "Fast Forward", "Rewind"].includes(ariaLabel)) {
+                button.style.display = "none";
+              }
+            });
+          });
+
+        } catch (e) {
+          console.error("Webamp failed to load:", e);
+        }
+      }, 2000); // after title fade
+    }, 5000); // after background fade
+  </script>
 </body>
 </html>
