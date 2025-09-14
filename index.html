@@ -8,109 +8,128 @@
   html, body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    background: black;
-    width: 100%;
     height: 100%;
+    background: black;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
-  /* Background with Ken Burns */
+  /* Background Image */
   #background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background: url('kingsfatecover.jpg') no-repeat center center;
     background-size: cover;
     opacity: 0;
-    animation: fadeInBackground 5s forwards, kenBurns 60s infinite alternate;
+    animation: fadeInBackground 5s forwards;
   }
 
   @keyframes fadeInBackground {
     to { opacity: 1; }
   }
 
-  @keyframes kenBurns {
-    0% { transform: scale(1) translate(0,0); }
-    100% { transform: scale(1.1) translate(-5px, -5px); }
-  }
-
-  /* Title */
+  /* Title Graphic */
   #title {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     max-width: 80%;
     opacity: 0;
     animation: fadeInTitle 2s forwards;
-    animation-delay: 5s;
+    animation-delay: 5s; /* Start after background fade */
+    margin-bottom: 20px;
+    z-index: 2;
   }
 
   @keyframes fadeInTitle {
     to { opacity: 1; }
   }
 
-  /* Player container */
-  #playerContainer {
-    position: absolute;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    max-width: 400px;
+  /* Audio Controls Container */
+  #controlsContainer {
+    display: flex;
+    gap: 20px;
     opacity: 0;
-    animation: fadeInPlayer 1s forwards;
-    animation-delay: 7s;
+    animation: fadeInControls 1s forwards;
+    animation-delay: 7s; /* Start after title fade */
+    z-index: 2;
   }
 
-  @keyframes fadeInPlayer {
+  @keyframes fadeInControls {
     to { opacity: 1; }
   }
 
-  /* Scale the player to fit mobile */
-  .webamp-container {
-    width: 100% !important;
+  button {
+    font-size: 24px;
+    padding: 10px 15px;
+    border: none;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
   }
+
+  button:hover {
+    background: rgba(255,255,255,0.4);
+  }
+
+  audio {
+    display: none; /* Hide default audio */
+  }
+
 </style>
 </head>
 <body>
 
 <div id="background"></div>
+
 <img id="title" src="AKingsFate_Headlineshadow.png" alt="A King's Fate">
 
-<div id="playerContainer"></div>
+<!-- HTML5 Audio -->
+<audio id="player" preload="none">
+  <source src="https://drive.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e" type="audio/mpeg">
+</audio>
 
-<!-- Webamp JS & CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/webamp@3.0.3/dist/webamp.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/webamp@3.0.3/dist/webamp.min.js"></script>
+<!-- Custom Controls -->
+<div id="controlsContainer">
+  <button id="rewind">⏪</button>
+  <button id="playPause">▶️</button>
+  <button id="forward">⏩</button>
+</div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const webamp = new Webamp({
-      initialTracks: [
-        {
-          metaData: {
-            title: "A King's Fate",
-            artist: "Moonzoom Music"
-          },
-          url: "https://docs.google.com/uc?export=download&id=19OwVETA5ti_LHotKDGIYc3gC8IggV58e"
-        }
-      ],
-      noWebampWindow: false,  // show player UI
-      initialTracksStartPlaying: false
-    });
+  const player = document.getElementById('player');
+  const playPauseBtn = document.getElementById('playPause');
+  const rewindBtn = document.getElementById('rewind');
+  const forwardBtn = document.getElementById('forward');
 
-    webamp.renderWhenReady(document.getElementById("playerContainer")).then(() => {
-      // Remove unwanted controls
-      const controls = document.querySelectorAll(".control");
-      controls.forEach(control => {
-        const keep = ["play", "pause", "rewind", "fastForward"];
-        if (!keep.includes(control.dataset.command)) {
-          control.style.display = "none";
-        }
-      });
-    });
+  // Play/Pause
+  playPauseBtn.addEventListener('click', () => {
+    if (player.paused) {
+      player.play();
+      playPauseBtn.textContent = "⏸️";
+    } else {
+      player.pause();
+      playPauseBtn.textContent = "▶️";
+    }
   });
+
+  // Rewind 10s
+  rewindBtn.addEventListener('click', () => {
+    player.currentTime = Math.max(player.currentTime - 10, 0);
+  });
+
+  // Fast Forward 10s
+  forwardBtn.addEventListener('click', () => {
+    player.currentTime = Math.min(player.currentTime + 10, player.duration || player.currentTime);
+  });
+
+  // Optional: Pause/play button sync if user interacts with the default system controls
+  player.addEventListener('play', () => playPauseBtn.textContent = "⏸️");
+  player.addEventListener('pause', () => playPauseBtn.textContent = "▶️");
 </script>
 
 </body>
